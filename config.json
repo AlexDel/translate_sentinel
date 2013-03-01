@@ -1,0 +1,6 @@
+{
+    "string_length":{
+        "max":10000,
+        "min":1
+    }
+}
