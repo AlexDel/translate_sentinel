@@ -17,14 +17,18 @@ class Translation:
     def __init__(self,orig_sent, target_sent):
         self.original = Sentence(orig_sent['lang'],orig_sent['text'])
         self.target = Sentence(target_sent['lang'],target_sent['text'])
+        self.params = []
 
-
-class Exchanger:
-    'This method performs communication with langprism'
-
-    def __init__(self, obj = None):
-        ''' Initialize class by getting json form LangPrism'''
-        trans_unit = json.loads(obj)
+    def add_param(self,param):
+        self.params.append(param)
 
 
 tu = Translation(t['orig'],t['target'])
+
+#TODO: юнит сам обращается к калькулятору и сохраняет результат его обработки в параметр
+#протестировать возможность добавления параметров
+#создать список параметров для пробегания по их списку и вычислению значений
+
+
+
+
