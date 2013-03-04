@@ -1,6 +1,9 @@
 # coding=utf-8
 import json
 from calculator import calculators
+import decider
+
+print(decider.r)
 
 test = u'{"target": {"lang": "en", "text": "Women in Tech: Put Your Money Where Your Mouth."}, "orig": {"lang": "ru", "text": "Женщины в Tech: положить ваши деньги, когда ваш рот."}}'
 t = json.loads(test)
@@ -32,12 +35,8 @@ class Translation:
             self.add_param(Param(self,calc))
 
 
+
 tu = Translation(t['orig'],t['target'])
-
-#TODO: юнит сам обращается к калькулятору и сохраняет результат его обработки в параметр
-#протестировать возможность добавления параметров
-#создать список параметров для пробегания по их списку и вычислению значений
-
 tu.calc_all_params()
 for p in tu.params:
     print p.name + str(p.value)
