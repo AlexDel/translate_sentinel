@@ -12,19 +12,22 @@ class Calculator:
 class String_target_length(Calculator):
 
     def __init__(self):
-        self.name = 'String_target_length'
+        self.name = u'String_target_length'
 
     def perform_calc(self, translation_unit):
        return len(translation_unit.target.text)
 
-class String_original_length(Calculator):
+
+class Length_difference(Calculator):
 
     def __init__(self):
-        self.name = 'String_original_length'
+        self.name = u'Length_difference'
 
     def perform_calc(self, translation_unit):
-        return len(translation_unit.original.text)
+        or_length = float(len(translation_unit.original.text))
+        tar_length = float(len(translation_unit.target.text))
 
 
+        return or_length/tar_length
 
-calculators = [String_original_length(),String_target_length()]
+calculators = [String_target_length(), Length_difference()]

@@ -1,6 +1,10 @@
 {
-    "string_length":{
+    "String_target_length":{
         "max":10000,
         "min":1
+    },
+    "Length_difference":{
+        "max":3,
+        "min":0.3
     }
 }

@@ -39,8 +39,4 @@ class Translation:
 tu = Translation(t['orig'],t['target'])
 tu.calc_all_params()
 for p in tu.params:
-    print p.name + str(p.value)
-
-
-
-
+    print u"%s  %s" % (p.name, p.value)
