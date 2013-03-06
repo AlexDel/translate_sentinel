@@ -14,7 +14,7 @@ class Decider:
             min_value = float('-inf')
 
         if self.params[param.name].has_key(u'max'):
-            max_value = self.params[param.name]['min']
+            max_value = self.params[param.name]['max']
         else:
             max_value = float('inf')
 
