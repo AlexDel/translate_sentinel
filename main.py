@@ -1,9 +1,8 @@
 # coding=utf-8
 import json
 from calculator import calculators
-import decider
+from decider import Decider
 
-print(decider.r)
 
 test = u'{"target": {"lang": "en", "text": "Women in Tech: Put Your Money Where Your Mouth."}, "orig": {"lang": "ru", "text": "Женщины в Tech: положить ваши деньги, когда ваш рот."}}'
 t = json.loads(test)
@@ -26,6 +25,7 @@ class Translation:
         self.original = Sentence(orig_sent['lang'],orig_sent['text'])
         self.target = Sentence(target_sent['lang'],target_sent['text'])
         self.params = []
+        self.calc_all_params()
 
     def add_param(self, param):
         self.params.append(param)
@@ -34,9 +34,12 @@ class Translation:
         for calc in calculators:
             self.add_param(Param(self,calc))
 
-
+    def is_vandal(self):
+        for p in self.params:
+            if Decider().compare_with_conf(p) == u'vandal':
+                return True
+                break
+        return False
 
 tu = Translation(t['orig'],t['target'])
-tu.calc_all_params()
-for p in tu.params:
-    print u"%s  %s" % (p.name, p.value)
+print tu.is_vandal()

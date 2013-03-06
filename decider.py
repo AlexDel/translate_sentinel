@@ -7,8 +7,8 @@ class Decider:
 
     def compare_with_conf(self,param):
 
-        min_value = self.params[param]['min']
-        max_value = self.params[param]['max']
+        min_value = self.params[param.name]['min']
+        max_value = self.params[param.name]['max']
 
         #Если нет максимального или минимального значения, то присваиваем бесконечность
         if not min_value and min_value != 0:
@@ -17,7 +17,7 @@ class Decider:
         if not max_value and max_value != 0:
             max_value = float('inf')
 
-        if param >= min_value and param <= max_value:
-            return True
+        if param.value >= min_value and param.value <= max_value:
+            return u'non_vandal'
         else:
-            return False
+            return u'vandal'
