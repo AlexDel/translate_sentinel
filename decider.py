@@ -17,7 +17,7 @@ class Decider:
         if not max_value and max_value != 0:
             max_value = float('inf')
 
-        if param >= min_value and value <= max_value:
+        if param >= min_value and param <= max_value:
             return True
         else:
             return False
