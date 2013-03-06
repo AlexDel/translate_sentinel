@@ -45,4 +45,4 @@ class Digits_amount(Calculator):
 
 
 
-calculators = [String_target_length(), Length_difference()]
+calculators = [String_target_length(), Length_difference(), Digits_amount()]
