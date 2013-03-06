@@ -41,6 +41,13 @@ class Translation:
                 break
         return False
 
+def process(t_unit):
+    # эта функция отвечает за получение данных и обработку результата
+    t_unit = json.loads(t_unit)
+    is_vandal = Translation(t_unit).is_vandal()
+    return json.dumps(is_vandal)
+
+
 
 #test stuff
 tu = Translation(t['orig'],t['target'])
