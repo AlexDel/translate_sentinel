@@ -41,5 +41,9 @@ class Translation:
                 break
         return False
 
+
+#test stuff
 tu = Translation(t['orig'],t['target'])
+for p in tu.params:
+    print u'%s  %s' % (p.name, p.value)
 print tu.is_vandal()

@@ -4,7 +4,10 @@
         "min":1
     },
     "Length_difference":{
-        "max":3,
+
         "min":0.3
+    },
+    "Digits_amount":{
+        "max":0.5
     }
 }

@@ -6,16 +6,18 @@ class Decider:
         self.params = json.loads(file.read(open(os.path.join(os.path.dirname(__file__),'config.json'),'r')))
 
     def compare_with_conf(self,param):
+    #Если нет максимального или минимального значения, то присваиваем бесконечность
 
-        min_value = self.params[param.name]['min']
-        max_value = self.params[param.name]['max']
-
-        #Если нет максимального или минимального значения, то присваиваем бесконечность
-        if not min_value and min_value != 0:
+        if self.params[param.name].has_key(u'min'):
+            min_value = self.params[param.name]['min']
+        else:
             min_value = float('-inf')
 
-        if not max_value and max_value != 0:
+        if self.params[param.name].has_key(u'max'):
+            max_value = self.params[param.name]['min']
+        else:
             max_value = float('inf')
+
 
         if param.value >= min_value and param.value <= max_value:
             return u'non_vandal'
