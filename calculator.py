@@ -58,5 +58,21 @@ class Digits_blocks_difference(Calculator):
 
         return float(len(or__blocks ^ tar__blocks))/ (len(or__blocks) + 1)
 
+class Alnum_symbols_part(Calculator):
+
+    def __init__(self):
+        self.name = 'Alphanum_symbols_part'
+
+    def _count_alnum(self,string):
+        return len([s for s in string if s.alnum()])
+
+    def perform_calc(self, translation_unit):
+        or_alnum = self._count_alnum(translation_unit.original.text)
+        tar_alnum = self._count_alnum(translation_unit.target.text)
+        return float(or_alnum)+1/tar_alnum+1
+
+
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 ]
+
+
