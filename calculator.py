@@ -69,7 +69,7 @@ class Alnum_symbols_part(Calculator):
     def perform_calc(self, translation_unit):
         or_alnum = self._count_alnum(translation_unit.original.text)
         tar_alnum = self._count_alnum(translation_unit.target.text)
-        return float(or_alnum)+1/tar_alnum+1
+        return (float(or_alnum)+1)/(tar_alnum+1)
 
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
