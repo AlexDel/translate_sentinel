@@ -64,15 +64,28 @@ class Alnum_symbols_part(Calculator):
         self.name = 'Alphanum_symbols_part'
 
     def _count_alnum(self,string):
-        return len([s for s in string if s.alnum()])
+        return len([s for s in string if s.isalnum()])
 
     def perform_calc(self, translation_unit):
         or_alnum = self._count_alnum(translation_unit.original.text)
         tar_alnum = self._count_alnum(translation_unit.target.text)
         return (float(or_alnum)+1)/(tar_alnum+1)
 
+class Target_upper_case(Calculator):
+
+    def __init__(self):
+        self.name = 'Target_upper_case'
+
+    def _count_uppercase(self,string):
+        return len([s for s in string if s.isupper()])
+
+    def perform_calc(self, translation_unit):
+        or_uppercase = self._count_uppercase(translation_unit.original.text)
+        tar_uppercase = self. _count_uppercase(translation_unit.target.text)
+        return (float(or_uppercase)+1)/(tar_uppercase+1)
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-]
+Target_upper_case()]
 
 
