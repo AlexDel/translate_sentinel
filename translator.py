@@ -2,16 +2,14 @@
 import json
 import requests
 
-url = 'http://translate.yandex.net/api/v1/tr.json/translate'
+class Translator:
 
-data = {
-    'lang':'ru-en',
-    'text':u'Текст, для которого требуется определить язык.',
-    'format': u''
+    def __init__(self):
+        self.url = 'http://translate.yandex.net/api/v1/tr.json/translate'
 
-}
-
-
-r = requests.post(url, data)
-
-print r.text
+    def translate(self, text, or_lang, tar_lang):
+        data = {
+            'lang': u'%s-%s' % (or_lang, tar_lang),
+            'text': unicode(text),
+        }
+        return  json.loads(requests.post(self.url, data).text)['text'][0]
