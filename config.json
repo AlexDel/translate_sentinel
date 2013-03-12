@@ -9,5 +9,8 @@
     },
     "Digits_amount":{
         "max":0.5
+    },
+    "Digits_blocks_intersection":{
+        "max":0.5
     }
 }

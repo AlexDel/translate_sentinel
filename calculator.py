@@ -1,4 +1,5 @@
 # coding=utf-8
+import re
 
 class Calculator:
     '''
@@ -42,7 +43,20 @@ class Digits_amount(Calculator):
         target = translation_unit.target.text
         return self._count_digits(target)/float((len(target)))
 
+class Digits_blocks_difference(Calculator):
 
+    def __init__(self):
+        self.name = u'Digits_blocks_intersection'
 
+    def _collect_digit_blocks(self, string):
+        reg_exp = r'(\d+)'
+        return set(re.findall(reg_exp,string))
 
-calculators = [String_target_length(), Length_difference(), Digits_amount()]
+    def perform_calc(self, translation_unit):
+        or__blocks = self._collect_digit_blocks(translation_unit.original.text)
+        tar__blocks = self._collect_digit_blocks(translation_unit.target.text)
+
+        return float(len(or__blocks ^ tar__blocks))/ (len(or__blocks) + 1)
+
+calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
+]
