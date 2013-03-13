@@ -1,10 +1,14 @@
 # coding=utf-8
-import re, nltk
+import re, nltk, translator
 
 class Calculator:
     '''
     Calculators' base class
     '''
+
+    def tokenize(self,string):
+        tokenizer = nltk.tokenize.RegexpTokenizer('\s+', gaps=True)
+        return tokenizer.tokenize(string)
 
     def perform_calc(self, translation_unit):
         raise NotImplementedError
@@ -101,12 +105,8 @@ class Longest_word(Calculator):
     def __init__(self):
         self.name = 'Longest_word'
 
-    def _split_to_tokens(self,string):
-        tokenizer = nltk.tokenize.RegexpTokenizer('\s+', gaps=True)
-        return tokenizer.tokenize(string)
-
     def perform_calc(self, translation_unit):
-        return max([len(w) for w in self._split_to_tokens(translation_unit.target.text)])
+        return max([len(w) for w in self.tokenize(translation_unit.target.text)])
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word()]
