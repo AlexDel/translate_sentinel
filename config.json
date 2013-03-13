@@ -19,6 +19,9 @@
     },
     "Target_upper_case":{
         "max": 0.2
+    },
+    "Longest_symbol_repetition":{
+        "max":4
     }
 
 }

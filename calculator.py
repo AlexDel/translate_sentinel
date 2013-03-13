@@ -84,8 +84,20 @@ class Target_upper_case(Calculator):
         tar_uppercase = self. _count_uppercase(translation_unit.target.text)
         return (float(or_uppercase)+1)/(tar_uppercase+1)
 
+class Longest_symbol_repetition(Calculator):
+
+    def __init__(self):
+        self.name = 'Longest_symbol_repetition'
+
+    def _find_long_blocks(self, string):
+        '''Метод ищет кол-во символов длинее 3 символов'''
+        return [match[0] for match in re.findall(r'((\w)\2{2,})', string)]
+
+    def perform_calc(self, translation_unit):
+        return max(self._find_long_blocks(translation_unit.target.text))
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-Target_upper_case()]
+Target_upper_case(), Longest_symbol_repetition()]
 
 
