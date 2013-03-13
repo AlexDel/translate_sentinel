@@ -1,5 +1,5 @@
 # coding=utf-8
-import re
+import re, nltk
 
 class Calculator:
     '''
@@ -96,8 +96,19 @@ class Longest_symbol_repetition(Calculator):
     def perform_calc(self, translation_unit):
         return max(self._find_long_blocks(translation_unit.target.text))
 
+class Longest_word(Calculator):
+
+    def __init__(self):
+        self.name = 'Longest_word'
+
+    def _split_to_tokens(self,string):
+        tokenizer = nltk.tokenize.RegexpTokenizer('\s+', gaps=True)
+        return tokenizer.tokenize(string)
+
+    def perform_calc(self, translation_unit):
+        return max([len(w) for w in self._split_to_tokens(translation_unit.target.text)])
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-Target_upper_case(), Longest_symbol_repetition()]
+Target_upper_case(), Longest_symbol_repetition(),Longest_word()]
 
 

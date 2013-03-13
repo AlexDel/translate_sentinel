@@ -22,6 +22,9 @@
     },
     "Longest_symbol_repetition":{
         "max":4
+    },
+    "Longest_word":{
+        "max": 25
     }
 
 }
