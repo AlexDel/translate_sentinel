@@ -14,6 +14,21 @@ class Calculator:
         if lang == 'en':
             return nltk.stem.PorterStemmer().stem(word)
 
+    def remove_stopwords(self, word_list, lang = 'en'):
+        if lang == 'en':
+            stopwords = set(nltk.corpus.stopwords.words('english'))
+            return [word for word in word_list if word not in stopwords]
+        else:
+            return None
+
+    def normalize_sentence(self, sentence, lang):
+        """
+        эта функция выполняет разбиение на токены, удаление стоп-слова и стемминг
+        """
+        tokens = self.tokenize(sentence)
+        r_tokens = self.remove_stopwords(tokens, lang)
+        return [self.stem(token) for token in r_tokens ]
+
     def perform_calc(self, translation_unit):
         raise NotImplementedError
 
