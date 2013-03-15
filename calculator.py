@@ -102,7 +102,7 @@ class Longest_symbol_repetition(Calculator):
         return [match[0] for match in re.findall(r'((\w)\2{2,})', string)]
 
     def perform_calc(self, translation_unit):
-        return max(self._find_long_blocks(translation_unit.target.text))
+        return max([len(s) for s in  self._find_long_blocks(translation_unit.target.text)])
 
 class Longest_word(Calculator):
 
@@ -111,6 +111,28 @@ class Longest_word(Calculator):
 
     def perform_calc(self, translation_unit):
         return max([len(w) for w in self.tokenize(translation_unit.target.text)])
+
+class BLEU_metics(Calculator):
+
+    def __init__(self):
+        self.name = 'BLEU_metics'
+
+    def perform_calc(self, translation_unit):
+        or_text = translation_unit.original
+        tar_text = translation_unit.target
+
+        #если текст оригинала на английском, переводим вариант на английский и сравниваем
+        if or_text == 'en':
+            tar_text_translated = translator.Translator.translate(tar_text, tar_text.lang, or_text.lang)
+
+            return
+        #иначе ничего не возращаем (что делать с другими парами будем позже)
+        else:
+            return None
+
+
+
+
 
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
