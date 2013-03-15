@@ -25,6 +25,9 @@
     },
     "Longest_word":{
         "max": 25
+    },
+    "BLEU_metrics":{
+        "min": 0.25
     }
 
 }

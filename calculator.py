@@ -21,7 +21,7 @@ class Calculator:
         else:
             return None
 
-    def normalize_sentence(self, sentence, lang):
+    def normalize_sentence(self, sentence, lang = 'en'):
         """
         эта функция выполняет разбиение на токены, удаление стоп-слова и стемминг
         """
@@ -127,10 +127,10 @@ class Longest_word(Calculator):
     def perform_calc(self, translation_unit):
         return max([len(w) for w in self.tokenize(translation_unit.target.text)])
 
-class BLEU_metics(Calculator):
+class BLEU_metrics(Calculator):
 
     def __init__(self):
-        self.name = 'BLEU_metics'
+        self.name = 'BLEU_metrics'
 
     def perform_calc(self, translation_unit):
         or_text = translation_unit.original
@@ -139,18 +139,16 @@ class BLEU_metics(Calculator):
         #если текст оригинала на английском, переводим вариант на английский и сравниваем
         if or_text == 'en':
             tar_text_translated = translator.Translator.translate(tar_text, tar_text.lang, or_text.lang)
+            token_intersection =len(self.normalize_sentence(tar_text_translated) & set(self.normalize_sentence(or_text)))
+            or_normalized_length = len(set(self.normalize_sentence(or_text)))
 
-            return
+            return float(token_intersection)/or_normalized_length
         #иначе ничего не возращаем (что делать с другими парами будем позже)
         else:
             return None
 
 
-
-
-
-
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-Target_upper_case(), Longest_symbol_repetition(),Longest_word()]
+Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics()]
 
 
