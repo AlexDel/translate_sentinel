@@ -127,6 +127,11 @@ class Longest_word(Calculator):
     def perform_calc(self, translation_unit):
         return max([len(w) for w in self.tokenize(translation_unit.target.text)])
 
+class Calculator_with_translation():
+    # этот класс применяется, когда нам надо привести оба предложения к одному языку,
+    # например, к английскому, чтобы проводить анализ
+    pass
+
 class BLEU_metrics(Calculator):
 
     def __init__(self):
