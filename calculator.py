@@ -127,12 +127,20 @@ class Longest_word(Calculator):
     def perform_calc(self, translation_unit):
         return max([len(w) for w in self.tokenize(translation_unit.target.text)])
 
-class Calculator_with_translation():
-    # этот класс применяется, когда нам надо привести оба предложения к одному языку,
-    # например, к английскому, чтобы проводить анализ
-    pass
+class Calculator_with_translator(Calculator):
+    '''
+    расширение класса с использование машинного переводчика
+    '''
 
-class BLEU_metrics(Calculator):
+    def translate(self, text, or_lang = 'ru', tar_lang = 'en'):
+        return translator.Translator.translate(text, tar_lang, or_lang)
+
+
+    def perform_calc(self, translation_unit):
+        raise NotImplementedError
+
+
+class BLEU_metrics(Calculator_with_translator):
 
     def __init__(self):
         self.name = 'BLEU_metrics'
@@ -142,13 +150,19 @@ class BLEU_metrics(Calculator):
         tar_text = translation_unit.target
 
         #если текст оригинала на английском, переводим вариант на английский и сравниваем
-        if or_text == 'en':
-            tar_text_translated = translator.Translator.translate(tar_text, tar_text.lang, or_text.lang)
-            token_intersection =len(self.normalize_sentence(tar_text_translated) & set(self.normalize_sentence(or_text)))
+        if or_text.lang == 'en':
+            #переводим текст варианта на английский (оригинальный)
+            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+
+            #считаем, сколько нормализованных токенов получилось
+            token_intersection = len(self.normalize_sentence(tar_text_translated) & set(self.normalize_sentence(or_text)))
+
+            #длина исходного предложения (в токенах)
             or_normalized_length = len(set(self.normalize_sentence(or_text)))
 
             return float(token_intersection)/or_normalized_length
-        #иначе ничего не возращаем (что делать с другими парами будем позже)
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
