@@ -21,13 +21,16 @@ class Calculator:
         else:
             return None
 
-    def normalize_sentence(self, sentence, lang = 'en'):
+    def normalize_sentence(self, sentence, lang = 'en',filter_stopwords = True):
         """
         эта функция выполняет разбиение на токены, удаление стоп-слова и стемминг
         """
         tokens = self.tokenize(sentence)
-        r_tokens = self.remove_stopwords(tokens, lang)
-        return [self.stem(token) for token in r_tokens ]
+        if filter_stopwords == False:
+            return [self.stem(token) for token in tokens ]
+        else:
+            r_tokens = self.remove_stopwords(tokens, lang)
+            return [self.stem(token) for token in r_tokens ]
 
     def perform_calc(self, translation_unit):
         raise NotImplementedError
@@ -166,8 +169,37 @@ class BLEU_metrics(Calculator_with_translator):
         else:
             return None
 
+class Bigram_calculator(Calculator_with_translator):
+
+    def __init__(self):
+        self.name = 'Bigram_calculator'
+
+    def _make_bigrams(self, tokens):
+        return nltk.util.bigrams(tokens)
+
+    def perform_calc(self, translation_unit):
+        or_text = translation_unit.original
+        tar_text = translation_unit.target
+
+        if or_text.lang == 'en':
+            #переводим текст варианта на английский (оригинальный)
+            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+
+            #превращаем текст в биграммы
+            or_bigramms = self._make_bigrams(self.tokenize(or_text.text))
+            tar_bigrams = self._make_bigrams(self.tokenize(tar_text_translated))
+
+            #считаем пересечение биграм
+            bigram_intersection = set(or_bigramms).intersection(set(tar_bigrams))
+
+            return float(len(bigram_intersection))/(2*len(self.tokenize(tar_text_translated)))
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics()]
+Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator()]
 
 

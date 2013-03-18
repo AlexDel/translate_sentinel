@@ -28,6 +28,8 @@
     },
     "BLEU_metrics":{
         "min": 0.25
+    },
+    "Bigram_calculator":{
+        min: 0.1
     }
-
 }
