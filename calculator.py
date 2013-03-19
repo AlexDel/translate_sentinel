@@ -139,10 +139,6 @@ class Calculator_with_translator(Calculator):
         return translator.Translator.translate(text, tar_lang, or_lang)
 
 
-    def perform_calc(self, translation_unit):
-        raise NotImplementedError
-
-
 class BLEU_metrics(Calculator_with_translator):
 
     def __init__(self):
@@ -199,7 +195,30 @@ class Bigram_calculator(Calculator_with_translator):
             return None
 
 
-class Levenstein_calculator(Calculator_with_translator):
+class Binary_calculator(Calculator_with_translator):
+
+    def retrieve_normalized_tokens(self, translation_unit):
+        #этот метод возращает нормализованные токены оригинала и перевода
+
+        or_text = translation_unit.original
+        tar_text = translation_unit.target
+        if or_text.lang == 'en':
+            #переводим текст варианта на английский (оригинальный)
+            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+
+            #нормализуем
+            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
+
+            #возращаем нормализованные токены
+            return norm_or, norm_tar
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+
+            return None, None
+
+
+class Levenstein_calculator(Binary_calculator):
 
     def __init__(self):
         self.name = 'Levenstein_calculator'
@@ -208,16 +227,9 @@ class Levenstein_calculator(Calculator_with_translator):
         return nltk.metrics.distance.edit_distance(seq1, seq2, transposition = True)
 
     def perform_calc(self, translation_unit):
-        or_text = translation_unit.original
-        tar_text = translation_unit.target
+        norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
-        if or_text.lang == 'en':
-            #переводим текст варианта на английский (оригинальный)
-            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
-
-            #нормализуем
-            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
-
+        if norm_or and norm_tar:
             #возращаем нормализованное расстояние Левенштейна
             return float(self._calc_levdistance(norm_or,norm_tar))/len(norm_or)
 
@@ -231,22 +243,16 @@ class Jaccard_distance(Calculator_with_translator):
         self.name = 'Jaccard_distance'
 
     def perform_calc(self, translation_unit):
-        or_text = translation_unit.original
-        tar_text = translation_unit.target
+        norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
-        if or_text.lang == 'en':
-            #переводим текст варианта на английский (оригинальный)
-            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
-
-            #нормализуем
-            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
-
+        if norm_or and norm_tar:
             #возращаем нормализованное расстояние Левенштейна
             return float(nltk.metrics.jaccard_distance(set(norm_or),set(norm_tar)))
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
+
 
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),

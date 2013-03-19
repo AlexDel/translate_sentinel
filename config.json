@@ -34,5 +34,9 @@
     },
     "Levenstein_calculator":{
         "min": 0.1
-    }
+    },
+    "Jaccard_distance":{
+        "min": 0.1
+    },
+
 }
