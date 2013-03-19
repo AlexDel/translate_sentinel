@@ -237,7 +237,7 @@ class Levenstein_calculator(Binary_calculator):
         else:
             return None
 
-class Jaccard_distance(Calculator_with_translator):
+class Jaccard_distance(Binary_calculator):
 
     def __init__(self):
         self.name = 'Jaccard_distance'
@@ -253,7 +253,7 @@ class Jaccard_distance(Calculator_with_translator):
         else:
             return None
 
-class Braun_Balke_calculator(Calculator_with_translator):
+class Braun_Balke_calculator(Binary_calculator):
 
     def __init__(self):
         self.name = 'Braun_Balke_calculator'
