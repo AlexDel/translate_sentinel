@@ -246,17 +246,30 @@ class Jaccard_distance(Calculator_with_translator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            #возращаем нормализованное расстояние Левенштейна
+            #возращаем нормализованное расстояние Жаккара
             return float(nltk.metrics.jaccard_distance(set(norm_or),set(norm_tar)))
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
+class Braun_Balke_calculator(Calculator_with_translator):
 
+    def __init__(self):
+        self.name = 'Braun_Balke_calculator'
+
+    def perform_calc(self, translation_unit):
+        norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
+
+        if norm_or and norm_tar:
+            return float(set(norm_or).intersection(set(norm_tar)))/max([len(s) for s in [norm_or,norm_tar]])
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
-Levenstein_calculator()]
+Levenstein_calculator(), Braun_Balke_calculator()]
 
 

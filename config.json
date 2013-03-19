@@ -38,5 +38,8 @@
     "Jaccard_distance":{
         "min": 0.1
     },
+    "Braun_Balke_calculator":{
+        "min": 0.1
+    }
 
 }
