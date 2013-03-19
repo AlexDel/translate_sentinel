@@ -268,6 +268,22 @@ class Braun_Balke_calculator(Binary_calculator):
         else:
             return None
 
+class Ochai_calculator(Binary_calculator):
+
+    def __init__(self):
+        self.name = 'Ochai_calculator'
+
+    def perform_calc(self, translation_unit):
+        norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
+
+        if norm_or and norm_tar:
+            return float(set(norm_or).intersection(set(norm_tar)))/(len(set(norm_tar)) * len(set(norm_or)))**0.5
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
+
+
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
 Levenstein_calculator(), Braun_Balke_calculator()]

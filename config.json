@@ -40,6 +40,8 @@
     },
     "Braun_Balke_calculator":{
         "min": 0.1
+    },
+    "Ochai_calculator":{
+        "min": 0.1
     }
-
 }
