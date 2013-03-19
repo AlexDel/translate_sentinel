@@ -43,5 +43,8 @@
     },
     "Ochai_calculator":{
         "min": 0.1
+    },
+    "Simpson_calculator":{
+        "min": 0.1
     }
 }

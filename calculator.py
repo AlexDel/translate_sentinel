@@ -283,6 +283,22 @@ class Ochai_calculator(Binary_calculator):
         else:
             return None
 
+class Simpson_calculator(Binary_calculator):
+
+    def __init__(self):
+        self.name = 'Simpson_calculator'
+
+    def perform_calc(self, translation_unit):
+
+        norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
+
+        if norm_or and norm_tar:
+            return float(set(norm_or).intersection(set(norm_tar)))/min([len(s) for s in [norm_or,norm_tar]])
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
