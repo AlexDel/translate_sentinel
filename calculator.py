@@ -199,7 +199,35 @@ class Bigram_calculator(Calculator_with_translator):
             return None
 
 
+class Levenstein_calculator(Calculator_with_translator):
+
+    def __init__(self):
+        self.name = 'Levenstein_calculator'
+
+    def _calc_levdistance(self, seq1,seq2):
+        return nltk.metrics.distance.edit_distance(seq1, seq2, transposition = True)
+
+    def perform_calc(self, translation_unit):
+        or_text = translation_unit.original
+        tar_text = translation_unit.target
+
+        if or_text.lang == 'en':
+            #переводим текст варианта на английский (оригинальный)
+            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+
+            #нормализуем
+            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
+
+            #возращаем нормализованное расстояние Левенштейна
+            return float(self._calc_levdistance(norm_or,norm_tar))/len(norm_or)
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
+
+
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
-Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator()]
+Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
+Levenstein_calculator()]
 
 

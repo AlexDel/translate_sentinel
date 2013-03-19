@@ -31,5 +31,8 @@
     },
     "Bigram_calculator":{
         "min": 0.1
+    },
+    "Levenstein_calculator":{
+        "min": 0.1
     }
 }
