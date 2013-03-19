@@ -225,6 +225,29 @@ class Levenstein_calculator(Calculator_with_translator):
         else:
             return None
 
+class Jaccard_distance(Calculator_with_translator):
+
+    def __init__(self):
+        self.name = 'Jaccard_distance'
+
+    def perform_calc(self, translation_unit):
+        or_text = translation_unit.original
+        tar_text = translation_unit.target
+
+        if or_text.lang == 'en':
+            #переводим текст варианта на английский (оригинальный)
+            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+
+            #нормализуем
+            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
+
+            #возращаем нормализованное расстояние Левенштейна
+            return float(nltk.metrics.jaccard_distance(set(norm_or),set(norm_tar)))
+
+        #иначе ничего не возращаем (что делать с другими парами будем позже думать)
+        else:
+            return None
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
