@@ -28,7 +28,6 @@ def list_regexp_checker(string,regexp_list):
     for regexp in regexp_list:
         if re.match(regexp,string):
             return True
-            break
 
     return False
 
