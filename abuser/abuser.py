@@ -58,6 +58,7 @@ def collect_abuse_words(tokens, lang):
     возвращает список матов
     '''
     abuse_words = []
+    tokens = prepare_text(tokens,lang)
 
     abuse_regexp = abuse_dicts[lang]
     for t in tokens:
