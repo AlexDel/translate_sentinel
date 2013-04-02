@@ -1,6 +1,7 @@
 # coding=utf-8
 import re, nltk, translator
 from abuser import abuser
+from nltk.corpus import wordnet as wn
 
 class Calculator:
     '''
@@ -121,7 +122,11 @@ class Longest_symbol_repetition(Calculator):
         return [match[0] for match in re.findall(r'((\w)\2{2,})', string)]
 
     def perform_calc(self, translation_unit):
-        return max([len(s) for s in  self._find_long_blocks(translation_unit.target.text)])
+        long_bloks = self._find_long_blocks(translation_unit.target.text)
+        if len(long_bloks)  > 0:
+            return max([len(s) for s in long_bloks ])
+        else:
+            return 0
 
 class Longest_word(Calculator):
 
@@ -306,8 +311,8 @@ class Profanity_calculator(Calculator):
         self.name = 'Profanity_calculator'
 
     def perform_calc(self, translation_unit):
-        profanity_num_or = abuser.collect_abuse_words(self.tokenize(translation_unit.original.text))
-        profanity_num_tar = abuser.collect_abuse_words(self.tokenize(translation_unit.target.text))
+        profanity_num_or = len(abuser.collect_abuse_words(self.tokenize(translation_unit.original.text),translation_unit.original.lang))
+        profanity_num_tar = len(abuser.collect_abuse_words(self.tokenize(translation_unit.target.text), translation_unit.target.lang))
 
         return float((1 + profanity_num_or))/(1 + profanity_num_tar)
 

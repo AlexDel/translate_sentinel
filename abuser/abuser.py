@@ -77,6 +77,3 @@ def collect_abuse_words(tokens, lang):
             abuse_words.append(t)
 
     return abuse_words
-
-
-print collect_abuse_words([u'give',u'a',u'fuck'], u'en')
