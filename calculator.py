@@ -1,5 +1,6 @@
 # coding=utf-8
 import re, nltk, translator
+from abuser import abuser
 
 class Calculator:
     '''
@@ -299,9 +300,20 @@ class Simpson_calculator(Binary_calculator):
         else:
             return None
 
+class Profanity_calculator(Calculator):
+
+    def __init__(self):
+        self.name = 'Profanity_calculator'
+
+    def perform_calc(self, translation_unit):
+        profanity_num_or = abuser.collect_abuse_words(self.tokenize(translation_unit.original.text))
+        profanity_num_tar = abuser.collect_abuse_words(self.tokenize(translation_unit.target.text))
+
+        return float((1 + profanity_num_or))/(1 + profanity_num_tar)
+
 
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
-Levenstein_calculator(), Braun_Balke_calculator()]
+Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator()]
 
 

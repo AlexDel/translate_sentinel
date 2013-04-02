@@ -19,8 +19,20 @@ rus_abuse = [
     u"г(а|о)вн.*"
 ]
 
+eng_abuse = {
+    u'dick.*',
+    u'pussy.*',
+    u'.*fuck.*',
+    u'shit.*',
+    u'jerk.*',
+    u'ass',
+    u'whore.*',
+    u'suck.*'
+}
+
 abuse_dicts = {
-    'ru':rus_abuse
+    'ru':rus_abuse,
+    'en':eng_abuse
 }
 
 def list_regexp_checker(string,regexp_list):
@@ -65,3 +77,6 @@ def collect_abuse_words(tokens, lang):
             abuse_words.append(t)
 
     return abuse_words
+
+
+print collect_abuse_words([u'give',u'a',u'fuck'], u'en')
