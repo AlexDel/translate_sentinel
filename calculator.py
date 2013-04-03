@@ -317,6 +317,66 @@ class Profanity_calculator(Calculator):
         return float((1 + profanity_num_or))/(1 + profanity_num_tar)
 
 
+class Semantic_calculator(Calculator_with_translator):
+
+    def __init__(self):
+        self.name = 'Semantic_calculator'
+
+    def get_word_similarity(self, word_a, word_b):
+        """
+        find similarity between word senses of two words
+        """
+        wordasynsets = wn.synsets(word_a)
+        wordbsynsets = wn.synsets(word_b)
+        synsetnamea = [wn.synset(str(syns.name)) for syns in wordasynsets]
+        synsetnameb = [wn.synset(str(syns.name)) for syns in wordbsynsets]
+
+        sem_distance = []
+
+        for sseta, ssetb in [(sseta,ssetb) for sseta in synsetnamea for ssetb in synsetnameb]:
+            sem_distance.append(sseta.wup_similarity(ssetb))
+
+        return max(sem_distance)
+
+    def create_sent_vector(self, translation_unit):
+        '''
+        Этот метод создает вектор используемый для дальнейших вычислений
+        '''
+        t_var = [translation_unit.original, translation_unit.target]
+        common_tokens = []
+
+        #если язык варианта перевода - английский, то просто нормализуем предложение, иначе переводим машиной, а потом нормализуем
+        for t in t_var:
+            if t.lang != 'en':
+                common_tokens.append(self.normalize_sentence(self.translate(t)))
+            else:
+                common_tokens.append(self.normalize_sentence(self.translate(t.text, t.lang, 'en')))
+
+        #делаем собственно вектор
+        sent_vector = {}
+
+        for token in common_tokens:
+            sent_vector[token] = 0
+
+        return sent_vector
+
+    def calc_vector(self,vector, tokens):
+        '''
+        Данный метод вычисляет значение вектора для данного предложения
+        '''
+        for t in tokens:
+            for k in vector.keys():
+                if k == t:
+                    vector[k] = 1
+                else:
+                    vector[k] = self.get_word_similarity(k,t)
+
+        return vector
+
+
+
+
+#список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
 Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator()]
