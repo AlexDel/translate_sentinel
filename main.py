@@ -51,6 +51,8 @@ def process(t_unit):
 
 #test stuff
 tu = Translation(t['orig'],t['target'])
-for p in tu.params:
-    print u'%s  %s' % (p.name, p.value)
-print tu.is_vandal()
+#for p in tu.params:
+#    print u'%s  %s' % (p.name, p.value)
+#print tu.is_vandal()
+
+print Calculator_with_translator().normalize_in_english(tu.original)[1]

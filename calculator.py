@@ -142,12 +142,13 @@ class Calculator_with_translator(Calculator):
     '''
 
     def translate(self, text, or_lang = 'ru', tar_lang = 'en'):
-        return translator.Translator().translate(text, tar_lang, or_lang)
+        return translator.Translator().translate(text, or_lang, tar_lang)
 
     def normalize_in_english(self, sentence):
         '''
         этот метод приводит предложение к набору лемм на английском языке
         '''
+        print self.translate(sentence.text, sentence.lang, 'en')
         if sentence.lang != 'en':
             return self.normalize_sentence(self.translate(sentence.text, sentence.lang, 'en'))
         else:
