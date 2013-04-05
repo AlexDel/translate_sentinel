@@ -142,7 +142,16 @@ class Calculator_with_translator(Calculator):
     '''
 
     def translate(self, text, or_lang = 'ru', tar_lang = 'en'):
-        return translator.Translator.translate(text, tar_lang, or_lang)
+        return translator.Translator().translate(text, tar_lang, or_lang)
+
+    def normalize_in_english(self, sentence):
+        '''
+        этот метод приводит предложение к набору лемм на английском языке
+        '''
+        if sentence.lang != 'en':
+            return self.normalize_sentence(self.translate(sentence.text, sentence.lang, 'en'))
+        else:
+            return self.normalize_sentence(sentence.text)
 
 
 class BLEU_metrics(Calculator_with_translator):
@@ -373,12 +382,17 @@ class Semantic_calculator(Calculator_with_translator):
 
         return vector
 
+    def perform_calc(self, translation_unit):
+        original_tokens = self.normalize_sentence()
+        target_tokens = ''
 
-
+        vector = self.create_sent_vector(translation_unit)
+        vector1 = self.calc_vector(vector, )
 
 #список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
 Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator()]
+
 
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 import json
-from calculator import calculators
+from calculator import *
 from decider import Decider
 
 
