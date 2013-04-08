@@ -8,22 +8,22 @@ class Calculator:
     Calculators' base class
     '''
 
-    def tokenize(self,string):
-        tokenizer = nltk.tokenize.RegexpTokenizer('\s+', gaps=True)
-        return tokenizer.tokenize(string)
+    def tokenize(self, string):
+        tokenizer = nltk.tokenize.RegexpTokenizer(u'\s+', gaps=True)
+        return tokenizer.tokenize(unicode(string))
 
-    def stem(self,word, lang = 'en'):
-        if lang == 'en':
+    def stem(self,word, lang = u'en'):
+        if lang == u'en':
             return nltk.stem.PorterStemmer().stem(word)
 
-    def remove_stopwords(self, word_list, lang = 'en'):
+    def remove_stopwords(self, word_list, lang = u'en'):
         if lang == 'en':
             stopwords = set(nltk.corpus.stopwords.words('english'))
             return [word for word in word_list if word not in stopwords]
         else:
             return None
 
-    def normalize_sentence(self, sentence, lang = 'en',filter_stopwords = True):
+    def normalize_sentence(self, sentence, lang = 'en', filter_stopwords = True):
         """
         эта функция выполняет разбиение на токены, удаление стоп-слова и стемминг
         """
@@ -148,8 +148,7 @@ class Calculator_with_translator(Calculator):
         '''
         этот метод приводит предложение к набору лемм на английском языке
         '''
-        print self.translate(sentence.text, sentence.lang, 'en')
-        if sentence.lang != 'en':
+        if sentence.lang != u'en':
             return self.normalize_sentence(self.translate(sentence.text, sentence.lang, 'en'))
         else:
             return self.normalize_sentence(sentence.text)
@@ -357,16 +356,18 @@ class Semantic_calculator(Calculator_with_translator):
 
         #если язык варианта перевода - английский, то просто нормализуем предложение, иначе переводим машиной, а потом нормализуем
         for t in t_var:
-            if t.lang != 'en':
-                common_tokens.append(self.normalize_sentence(self.translate(t)))
+            if t.lang == u'en':
+                common_tokens.append(self.normalize_sentence(t))
             else:
-                common_tokens.append(self.normalize_sentence(self.translate(t.text, t.lang, 'en')))
+                common_tokens.append(self.normalize_sentence(self.translate(t.text, t.lang, u'en')))
+
+
 
         #делаем собственно вектор
         sent_vector = {}
 
         for token in common_tokens:
-            sent_vector[token] = 0
+            sent_vector[unicode(token)] = 0
 
         return sent_vector
 
@@ -384,16 +385,24 @@ class Semantic_calculator(Calculator_with_translator):
         return vector
 
     def perform_calc(self, translation_unit):
-        original_tokens = self.normalize_sentence()
-        target_tokens = ''
+        #нормалзуем предложения до набора токенов
+        original_tokens = self.normalize_in_english(translation_unit.original)
+        target_tokens = self.normalize_in_english(translation_unit.target)
 
+        # делаем основу семантического вектора
         vector = self.create_sent_vector(translation_unit)
-        vector1 = self.calc_vector(vector, )
+
+        #считаем 2 вектора (для ориниеала и перевода)
+        vector1 = self.calc_vector(vector, original_tokens)
+        vector2 = self.calc_vector(vector,target_tokens)
+
+        return len(vector1)
+
 
 #список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
-Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator()]
+Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator(), ]
 
 
 

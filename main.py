@@ -55,4 +55,4 @@ tu = Translation(t['orig'],t['target'])
 #    print u'%s  %s' % (p.name, p.value)
 #print tu.is_vandal()
 
-print Calculator_with_translator().normalize_in_english(tu.original)[1]
+print Semantic_calculator().perform_calc(tu)
