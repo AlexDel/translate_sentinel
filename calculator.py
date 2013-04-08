@@ -340,12 +340,14 @@ class Semantic_calculator(Calculator_with_translator):
         synsetnamea = [wn.synset(str(syns.name)) for syns in wordasynsets]
         synsetnameb = [wn.synset(str(syns.name)) for syns in wordbsynsets]
 
-        sem_distance = []
+        sem_distance = 0
 
-        for sseta, ssetb in [(sseta,ssetb) for sseta in synsetnamea for ssetb in synsetnameb]:
-            sem_distance.append(sseta.wup_similarity(ssetb))
-
-        return max(sem_distance)
+        for sseta in synsetnamea:
+            for ssetb in synsetnameb:
+                s_d = sseta.wup_similarity(ssetb)
+                if s_d > sem_distance:
+                    sem_distance =  s_d
+        return sem_distance
 
     def create_sent_vector(self, translation_unit):
         '''
