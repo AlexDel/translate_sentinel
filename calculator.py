@@ -29,10 +29,10 @@ class Calculator:
         """
         tokens = self.tokenize(sentence)
         if filter_stopwords == False:
-            return [self.stem(token) for token in tokens ]
+            return [self.stem(token).lower() for token in tokens ]
         else:
             r_tokens = self.remove_stopwords(tokens, lang)
-            return [self.stem(token) for token in r_tokens ]
+            return [self.stem(token).lower()  for token in r_tokens]
 
     def perform_calc(self, translation_unit):
         raise NotImplementedError
@@ -357,18 +357,19 @@ class Semantic_calculator(Calculator_with_translator):
         #если язык варианта перевода - английский, то просто нормализуем предложение, иначе переводим машиной, а потом нормализуем
         for t in t_var:
             if t.lang == u'en':
-                common_tokens.append(self.normalize_sentence(t))
+                common_tokens.extend(self.normalize_sentence(t.text))
             else:
-                common_tokens.append(self.normalize_sentence(self.translate(t.text, t.lang, u'en')))
+                common_tokens.extend(self.normalize_sentence(self.translate(t.text, t.lang, u'en')))
 
 
 
         #делаем собственно вектор
         sent_vector = {}
 
-        for token in common_tokens:
+        for token in set(common_tokens):
             sent_vector[unicode(token)] = 0
 
+        print sent_vector
         return sent_vector
 
     def calc_vector(self,vector, tokens):
