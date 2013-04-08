@@ -371,19 +371,21 @@ class Semantic_calculator(Calculator_with_translator):
         for token in set(common_tokens):
             sent_vector[unicode(token)] = 0
 
-        print sent_vector
         return sent_vector
 
-    def calc_vector(self,vector, tokens):
+    def calc_vector(self, vector, tokens):
         '''
         Данный метод вычисляет значение вектора для данного предложения
         '''
+
         for t in tokens:
             for k in vector.keys():
                 if k == t:
                     vector[k] = 1
                 else:
-                    vector[k] = self.get_word_similarity(k,t)
+                    sem_dist = self.get_word_similarity(k,t)
+                    if vector[k] < sem_dist:
+                        vector[k] = sem_dist
 
         return vector
 
@@ -399,7 +401,16 @@ class Semantic_calculator(Calculator_with_translator):
         vector1 = self.calc_vector(vector, original_tokens)
         vector2 = self.calc_vector(vector,target_tokens)
 
-        return len(vector1)
+        #считаем степень расождения векторов
+        vector_norm = []
+
+        print(vector1)
+        for k in vector.keys():
+            vector_norm.append((vector1[k] * vector2[k])**0.5)
+
+        result = float(sum(vector_norm))/len(vector_norm)
+
+        return result
 
 
 #список рабочих калькуляторов, используемых при оценке
