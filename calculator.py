@@ -363,14 +363,13 @@ class Semantic_calculator(Calculator_with_translator):
             else:
                 common_tokens.extend(self.normalize_sentence(self.translate(t.text, t.lang, u'en')))
 
-
-
         #делаем собственно вектор
         sent_vector = {}
 
         for token in set(common_tokens):
             sent_vector[unicode(token)] = 0
 
+        print sent_vector
         return sent_vector
 
     def calc_vector(self, vector, tokens):
@@ -378,14 +377,10 @@ class Semantic_calculator(Calculator_with_translator):
         Данный метод вычисляет значение вектора для данного предложения
         '''
 
-        for t in tokens:
-            for k in vector.keys():
-                if k == t:
-                    vector[k] = 1
-                else:
-                    sem_dist = self.get_word_similarity(k,t)
-                    if vector[k] < sem_dist:
-                        vector[k] = sem_dist
+
+        for k in vector.keys():
+            dists = [self.get_word_similarity(k,t) for t in tokens]
+            vector[k] = max(dists)
 
         return vector
 
@@ -404,12 +399,10 @@ class Semantic_calculator(Calculator_with_translator):
         #считаем степень расождения векторов
         vector_norm = []
 
-        print(vector1)
         for k in vector.keys():
             vector_norm.append((vector1[k] * vector2[k])**0.5)
 
         result = float(sum(vector_norm))/len(vector_norm)
-
         return result
 
 
