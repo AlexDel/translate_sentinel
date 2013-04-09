@@ -4,7 +4,7 @@ from calculator import *
 from decider import Decider
 
 
-test = u'{"target": {"lang": "en", "text": "All norms on a finite-dimensional vector space are equivalent from a topological viewpoint as they induce the same topology"}, "orig": {"lang": "ru", "text": "Женщины в Tech положить ваши деньги, когда ваш рот."}}'
+test = u'{"target": {"lang": "en", "text": "Women in Tech to put your money where your mouth is"}, "orig": {"lang": "ru", "text": "Женщины в Tech положить ваши деньги, когда ваш рот."}}'
 t = json.loads(test)
 
 class Sentence:
@@ -51,8 +51,6 @@ def process(t_unit):
 
 #test stuff
 tu = Translation(t['orig'],t['target'])
-#for p in tu.params:
-#    print u'%s  %s' % (p.name, p.value)
-#print tu.is_vandal()
-
-print Semantic_calculator().perform_calc(tu)
+for p in tu.params:
+    print u'%s  %s' % (p.name, p.value)
+print tu.is_vandal()

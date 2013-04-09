@@ -369,7 +369,6 @@ class Semantic_calculator(Calculator_with_translator):
         for token in set(common_tokens):
             sent_vector[unicode(token)] = 0
 
-        print sent_vector
         return sent_vector
 
     def calc_vector(self, vector, tokens):
@@ -409,7 +408,7 @@ class Semantic_calculator(Calculator_with_translator):
 #список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
-Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator(), ]
+Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator(),Semantic_calculator() ]
 
 
 
