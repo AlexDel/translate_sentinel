@@ -169,7 +169,7 @@ class BLEU_metrics(Calculator_with_translator):
             tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
 
             #считаем, сколько нормализованных токенов получилось
-            token_intersection = len(self.normalize_sentence(tar_text_translated) & set(self.normalize_sentence(or_text)))
+            token_intersection = len(set(self.normalize_sentence(tar_text_translated)) & set(self.normalize_sentence(or_text)))
 
             #длина исходного предложения (в токенах)
             or_normalized_length = len(set(self.normalize_sentence(or_text)))
@@ -239,7 +239,7 @@ class Levenstein_calculator(Binary_calculator):
         self.name = 'Levenstein_calculator'
 
     def _calc_levdistance(self, seq1,seq2):
-        return nltk.metrics.distance.edit_distance(seq1, seq2, transposition = True)
+        return nltk.metrics.distance.edit_distance(seq1, seq2)
 
     def perform_calc(self, translation_unit):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
@@ -277,7 +277,7 @@ class Braun_Balke_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(set(norm_or).intersection(set(norm_tar)))/max([len(s) for s in [norm_or,norm_tar]])
+            return float(len(set(norm_or).intersection(set(norm_tar))))/max([len(s) for s in [norm_or,norm_tar]])
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
@@ -292,7 +292,7 @@ class Ochai_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(set(norm_or).intersection(set(norm_tar)))/(len(set(norm_tar)) * len(set(norm_or)))**0.5
+            return float(len(set(norm_or).intersection(set(norm_tar))))/(len(set(norm_tar)) * len(set(norm_or)))**0.5
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:

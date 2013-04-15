@@ -4,7 +4,7 @@ from calculator import *
 from decider import Decider
 
 
-test = u'{"target": {"lang": "en", "text": "Women in Tech to put your money where your mouth is"}, "orig": {"lang": "ru", "text": "Женщины в Tech положить ваши деньги, когда ваш рот."}}'
+test = u'{"orig": {"lang": "en", "text": "Women in Tech to put your money where your mouth is"}, "target": {"lang": "ru", "text": "Женщины в Tech положить ваши деньги, когда ваш рот."}}'
 t = json.loads(test)
 
 class Sentence:
