@@ -57,7 +57,7 @@ class Length_difference(Calculator):
         tar_length = float(len(translation_unit.target.text))
 
 
-        return or_length/tar_length
+        return (or_length+1)/(tar_length+1)
 
 class Digits_amount(Calculator):
 

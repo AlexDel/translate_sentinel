@@ -9,7 +9,7 @@ def test():
         tests.append(tuple([r.decode('utf8') for  r in row]))
 
 
-    for i, t in enumerate(tests[:10]):
+    for i, t in enumerate(tests[:105]):
         # print i
         # print t[0]
         # print t[1]
