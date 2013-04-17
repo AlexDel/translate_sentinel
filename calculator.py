@@ -69,7 +69,7 @@ class Digits_amount(Calculator):
 
     def perform_calc(self, translation_unit):
         target = translation_unit.target.text
-        return self._count_digits(target)/float((len(target)))
+        return (self._count_digits(target) + 1)/(float((len(target))) + 1)
 
 class Digits_blocks_difference(Calculator):
 
@@ -134,7 +134,11 @@ class Longest_word(Calculator):
         self.name = 'Longest_word'
 
     def perform_calc(self, translation_unit):
-        return max([len(w) for w in self.tokenize(translation_unit.target.text)])
+        length_list = [len(w) for w in self.tokenize(translation_unit.target.text)]
+        if length_list :
+            return max(length_list)
+        else:
+            return 0
 
 class Calculator_with_translator(Calculator):
     '''
@@ -379,7 +383,10 @@ class Semantic_calculator(Calculator_with_translator):
 
         for k in vector.keys():
             dists = [self.get_word_similarity(k,t) for t in tokens]
-            vector[k] = max(dists)
+            if dists:
+                vector[k] = max(dists)
+            else:
+                vector[k] = 0
 
         return vector
 
