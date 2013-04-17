@@ -404,6 +404,11 @@ class Semantic_calculator(Calculator_with_translator):
         result = float(sum(vector_norm))/len(vector_norm)
         return result
 
+class Search_Distance_calculator(Semantic_calculator):
+
+    def __init__(self):
+        self.name = 'Search_Distance_calculator'
+
 
 #список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
