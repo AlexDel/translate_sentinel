@@ -44,13 +44,13 @@ class Translation:
 def process(t_unit):
     # эта функция отвечает за получение данных и обработку результата
     t_unit = json.loads(t_unit)
-    is_vandal = Translation(t_unit).is_vandal()
+    is_vandal = Translation(t_unit['orig'],t_unit['target']).is_vandal()
     return json.dumps(is_vandal)
 
 
 
 #test stuff
-tu = Translation(t['orig'],t['target'])
-for p in tu.params:
-    print u'%s  %s' % (p.name, p.value)
-print tu.is_vandal()
+# tu = Translation(t['orig'],t['target'])
+# for p in tu.params:
+#     print u'%s  %s' % (p.name, p.value)
+# print tu.is_vandal()

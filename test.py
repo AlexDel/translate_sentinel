@@ -9,19 +9,16 @@ def test():
         tests.append(tuple([r.decode('utf8') for  r in row]))
 
 
-    for i, t in enumerate(tests[:9]):
-        print i
-        print t[0]
-        print t[1]
+    for i, t in enumerate(tests[:10]):
+        # print i
+        # print t[0]
+        # print t[1]
 
         r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
-        print r
+        # print r
 
-        print json.loads(r)
-
-        #tu = json.loads(u'{"orig": {"lang": "en", "text": "%s}, "target": {"lang": "ru", "text": "%s"}}' % (t[0],t[1]))
-        #print main.process(tu)
-        #print '\n'
+        print main.process(r)
+        print '\n'
 
 test()
 # o = 0
