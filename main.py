@@ -47,6 +47,16 @@ def process(t_unit):
     is_vandal = Translation(t_unit['orig'],t_unit['target']).is_vandal()
     return json.dumps(is_vandal)
 
+def debug(t_unit):
+    t_unit = json.loads(t_unit)
+    tu  =  Translation(t_unit['orig'],t_unit['target'])
+
+    print tu.original.text
+    print tu.target.text
+    print tu.is_vandal()
+    for p in tu.params:
+        print u'%s  %s' % (p.name, p.value)
+
 
 
 #test stuff

@@ -15,10 +15,11 @@ def test():
         # print t[1]
 
         r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
-        # print r
 
-        print main.process(r)
-        print '\n'
+        res = json.loads(main.process(r))
+        if res != int(t[2]):
+            print main.debug(r)
+            print '\n'
 
 test()
 # o = 0
