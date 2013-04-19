@@ -48,6 +48,7 @@ def process(t_unit):
     return json.dumps(is_vandal)
 
 def debug(t_unit):
+    print t_unit
     t_unit = json.loads(t_unit)
     tu  =  Translation(t_unit['orig'],t_unit['target'])
 
