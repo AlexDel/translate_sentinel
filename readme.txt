@@ -1,7 +1,13 @@
 This module performs evaluation of sense-distortion in translation.
 Original text and its translation are analyzed under several parameters and decision about vandalism is made.
 
-1. Module structure
+1. Dependecies
+    Module is written in Python 2.7. Encoding - utf-8.
+    The following libs are required for correct functioning:
+    nltk - https://github.com/nltk/nltk
+    requests - https://github.com/kennethreitz/requests/
+
+2. Module structure
     Module is run with main.py.
 
     main.py API:
@@ -30,7 +36,7 @@ Original text and its translation are analyzed under several parameters and deci
             Profanity_calculator  1.0
             Semantic_calculator  0.318931803491
 
-2. Input structure and requirements
+3. Input structure and requirements
    Functions process() and debug() takes json-strings as inputs and return json as well
    Structure of the the inpu json is the following:
 
