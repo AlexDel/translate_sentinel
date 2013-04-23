@@ -84,9 +84,9 @@ class Digits_blocks_difference(Calculator):
         or__blocks = self._collect_digit_blocks(translation_unit.original.text)
         tar__blocks = self._collect_digit_blocks(translation_unit.target.text)
 
-        return float(len(or__blocks ^ tar__blocks))/ (len(or__blocks) + 1)
+        return float(len(or__blocks ^ tar__blocks)+1)/ (len(or__blocks) + 1)
 
-class Alnum_symbols_part(Calculator):
+class Alphanum_symbols_part(Calculator):
 
     def __init__(self):
         self.name = 'Alphanum_symbols_part'
@@ -415,7 +415,7 @@ class Semantic_calculator(Calculator_with_translator):
 
 
 #список рабочих калькуляторов, используемых при оценке
-calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(),
+calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(), Alphanum_symbols_part(),
 Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
 Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator(),Semantic_calculator() ]
 

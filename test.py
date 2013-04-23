@@ -9,6 +9,12 @@ def test():
         tests.append(tuple([r.decode('utf8') for  r in row]))
 
 
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+
+
     for i, t in enumerate(tests):
         # print i
         # print t[0]
@@ -20,6 +26,18 @@ def test():
         if res != int(t[2]):
             print main.debug(r)
             print '\n'
+
+        if res == 0 and  t[2] == 0:
+            TP += 1
+        if res == 1 and  t[2] == 1:
+            TN += 1
+        if res == 1 and  t[2] == 0:
+            FP += 1
+        if res == 0 and  t[2] == 1:
+            FN += 1
+
+    print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
+
 
 test()
 # o = 0
