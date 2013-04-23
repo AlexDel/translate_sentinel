@@ -37,14 +37,8 @@ def test():
             if res == 0 and  int(t[2]) == 1:
                 FN += 1
 
-            print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
     except:
-        pass
-
-
-
-    print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
-
+        print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
 
 test()
 # o = 0
