@@ -348,9 +348,12 @@ class Semantic_calculator(Calculator_with_translator):
 
         for sseta in synsetnamea:
             for ssetb in synsetnameb:
-                s_d = sseta.wup_similarity(ssetb)
-                if s_d > sem_distance:
-                    sem_distance =  s_d
+                try:
+                    s_d = sseta.wup_similarity(ssetb)
+                    if s_d > sem_distance:
+                        sem_distance =  s_d
+                except:
+                    sem_distance = 0
         return sem_distance
 
     def create_sent_vector(self, translation_unit):

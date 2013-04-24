@@ -15,30 +15,30 @@ def test():
     FN = 0
 
 
-    try:
-        for i, t in enumerate(tests):
-            # print i
-            # print t[0]
-            # print t[1]
+    #try:
+    for i, t in enumerate(tests):
+        # print i
+        # print t[0]
+        # print t[1]
 
-            r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
-            print i
-            res = json.loads(main.process(r))
-            if res != int(t[2]):
-                print main.debug(r)
-                print '\n'
+        r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
+        print i
+        res = json.loads(main.process(r))
+        if res != int(t[2]):
+            print main.debug(r)
+            print '\n'
 
-            if res == 0 and  int(t[2]) == 0:
-                TN += 1
-            if res == 1 and int(t[2]) == 1:
-                TP += 1
-            if res == 1 and int(t[2]) == 0:
-                FP += 1
-            if res == 0 and  int(t[2]) == 1:
-                FN += 1
+        if res == 0 and  int(t[2]) == 0:
+            TN += 1
+        if res == 1 and int(t[2]) == 1:
+            TP += 1
+        if res == 1 and int(t[2]) == 0:
+            FP += 1
+        if res == 0 and  int(t[2]) == 1:
+            FN += 1
 
-    except:
-        print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
+    #except:
+    print u'TP = %s ; TN = %s;  FP = %s, FN = %s' % (TP, TN, FP, FN)
 
 test()
 # o = 0
