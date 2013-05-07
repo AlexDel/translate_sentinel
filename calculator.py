@@ -1,5 +1,5 @@
 # coding=utf-8
-import re, nltk, translator
+import re, nltk, translator, copy
 from abuser import abuser
 from nltk.corpus import wordnet as wn
 
@@ -410,14 +410,17 @@ class Semantic_calculator(Calculator_with_translator):
         vector = self.create_sent_vector(translation_unit)
 
         #считаем 2 вектора (для ориниеала и перевода)
-        vector1 = self.calc_vector(vector, original_tokens)
-        vector2 = self.calc_vector(vector, target_tokens)
+        vector1 = self.calc_vector(copy.copy(vector), original_tokens)
+        vector2 = self.calc_vector(copy.copy(vector), target_tokens)
 
         #считаем степень расождения векторов
         vector_norm = []
 
         for k in vector.keys():
-            vector_norm.append((vector1[k] * vector2[k])**0.5)
+            if vector1[k] != 0 and vector2[k] !=0:
+                #print u'%s -- %s:%s' % (k, vector1[k],vector2[k])
+                vector_norm.append((vector1[k] * vector2[k])**0.5)
+
 
         result = float(sum(vector_norm))/len(vector_norm)
         return result
