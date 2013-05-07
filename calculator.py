@@ -157,6 +157,14 @@ class Calculator_with_translator(Calculator):
         else:
             return self.normalize_sentence(sentence.text)
 
+    def normalize_with_wnmorphy(self, sentence):
+        #этот метод нормализует слова с помощьюю встроенного в wordnet функкионала
+        if sentence.lang != u'en':
+            return [wn.morphy(t) for t in Calculator().tokenize(self.translate(sentence.text, sentence.lang, 'en')) if wn.morphy(t)]
+        else:
+            return [wn.morphy(t) for t in Calculator().tokenize(sentence.text) if wn.morphy(t)]
+
+
 
 class BLEU_metrics(Calculator_with_translator):
 
@@ -395,15 +403,15 @@ class Semantic_calculator(Calculator_with_translator):
 
     def perform_calc(self, translation_unit):
         #нормалзуем предложения до набора токенов
-        original_tokens = self.normalize_in_english(translation_unit.original)
-        target_tokens = self.normalize_in_english(translation_unit.target)
+        original_tokens = self.normalize_with_wnmorphy(translation_unit.original)
+        target_tokens = self.normalize_with_wnmorphy(translation_unit.target)
 
         # делаем основу семантического вектора
         vector = self.create_sent_vector(translation_unit)
 
         #считаем 2 вектора (для ориниеала и перевода)
         vector1 = self.calc_vector(vector, original_tokens)
-        vector2 = self.calc_vector(vector,target_tokens)
+        vector2 = self.calc_vector(vector, target_tokens)
 
         #считаем степень расождения векторов
         vector_norm = []

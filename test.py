@@ -16,7 +16,7 @@ def test():
 
 
     #try:
-    for i, t in enumerate(tests):
+    for i, t in enumerate(tests[1565:]):
         # print i
         # print t[0]
         # print t[1]
