@@ -16,13 +16,13 @@ def test():
 
 
     #try:
-    for i, t in enumerate(tests[1565:]):
+    for i, t in enumerate(tests[1312:]):
         # print i
         # print t[0]
         # print t[1]
 
         r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
-        print i
+        print i + 1312
         res = json.loads(main.process(r))
         if res != int(t[2]):
             print main.debug(r)

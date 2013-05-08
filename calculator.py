@@ -422,7 +422,8 @@ class Semantic_calculator(Calculator_with_translator):
                 vector_norm.append((vector1[k] * vector2[k])**0.5)
 
 
-        result = float(sum(vector_norm))/len(vector_norm)
+        result = float(sum(vector_norm))/(len(vector_norm)+1)
+        print result
         return result
 
 
