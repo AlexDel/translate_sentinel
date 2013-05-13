@@ -1,5 +1,5 @@
 # coding=utf-8
-import json
+import json, logging
 from calculator import *
 from decider import Decider
 
@@ -41,24 +41,33 @@ class Translation:
                 break
         return False
 
-def process(t_unit):
-    # эта функция отвечает за получение данных и обработку результата
-    t_unit = json.loads(t_unit)
-    is_vandal = Translation(t_unit['orig'],t_unit['target']).is_vandal()
-    return json.dumps(is_vandal)
 
-def debug(t_unit):
-    print t_unit
-    t_unit = json.loads(t_unit)
+def debug(t_unit_raw):
+    t_unit = json.loads(t_unit_raw)
+
+    result = []
     tu  =  Translation(t_unit['orig'],t_unit['target'])
 
-    print tu.original.text
-    print tu.target.text
-    print tu.is_vandal()
+    result.append(tu.original.text)
+    result.append(tu.target.text)
+    result.append(str(tu.is_vandal()))
     for p in tu.params:
-        print u'%s  %s' % (p.name, p.value)
+        result.append(u'%s  %s' % (p.name, p.value))
 
+    #возвращаем список
+    return result
 
+def process(t_unit_raw, make_log = True):
+    # эта функция отвечает за получение данных и обработку результата
+    t_unit = json.loads(t_unit_raw)
+    is_vandal = Translation(t_unit['orig'],t_unit['target']).is_vandal()
+
+    #записываем данные в блог
+
+    logging.basicConfig(format = u'%(levelname)-8s [%(asctime)s] %(message)s', level = logging.DEBUG, filename = u'trans_log.log')
+    logging.debug(u'\n'.join(debug(t_unit_raw)))
+
+    return json.dumps(is_vandal)
 
 #test stuff
 # tu = Translation(t['orig'],t['target'])
