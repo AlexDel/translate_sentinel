@@ -1,0 +1,58 @@
+{
+        "String_target_length":{
+        "max":10000,
+        "min":1
+    },
+    "Length_difference":{
+        "max":1.7,
+        "min":0.65
+    },
+    "Digits_amount":{
+        "max":0.5
+    },
+    "Digits_blocks_intersection":{
+        "max":0.6,
+        "min":0.4
+    },
+    "Alphanum_symbols_part":{
+        "max": 1.3,
+        "min": 0.7
+    },
+    "Target_upper_case":{
+        "min": 0.6,
+        "max": 1.6
+    },
+    "Longest_symbol_repetition":{
+        "max":4
+    },
+    "Longest_word":{
+        "max": 25
+    },
+    "BLEU_metrics":{
+        "min": 0.25
+    },
+    "Bigram_calculator":{
+        "min": 0.0
+    },
+    "Levenstein_calculator":{
+        "min": 0.1
+    },
+    "Jaccard_distance":{
+        "min": 0.1
+    },
+    "Braun_Balke_calculator":{
+        "min": 0.1
+    },
+    "Ochai_calculator":{
+        "min": 0.1
+    },
+    "Simpson_calculator":{
+        "min": 0.1
+    },
+    "Profanity_calculator":{
+        "min":0.8
+    },
+    "Semantic_calculator":{
+        "min": 0.5
+    }
+}
