@@ -64,8 +64,8 @@ def process(t_unit_raw, make_log = True):
 
     #записываем данные в блог
 
-    logging.basicConfig(format = u'%(levelname)-8s [%(asctime)s] %(message)s', level = logging.DEBUG, filename = u'trans_log.log')
-    logging.debug(u'\n'.join(debug(t_unit_raw)))
+    logging.basicConfig(format = u'SENTINEL - [%(asctime)s] \n %(message)s \n', level = logging.WARNING, filename = u'trans_log.log')
+    logging.warn(u'\n'.join(debug(t_unit_raw)))
 
     return json.dumps(is_vandal)
 
