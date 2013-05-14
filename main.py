@@ -57,15 +57,16 @@ def debug(t_unit_raw):
     #возвращаем список
     return result
 
-def process(t_unit_raw, make_log = True):
+def process(t_unit_raw, make_log = False):
     # эта функция отвечает за получение данных и обработку результата
     t_unit = json.loads(t_unit_raw)
     is_vandal = Translation(t_unit['orig'],t_unit['target']).is_vandal()
 
+    if make_log:
     #записываем данные в блог
 
-    logging.basicConfig(format = u'SENTINEL - [%(asctime)s] \n %(message)s \n', level = logging.WARNING, filename = u'trans_log.log')
-    logging.warn(u'\n'.join(debug(t_unit_raw)))
+        logging.basicConfig(format = u'SENTINEL - [%(asctime)s] \n %(message)s \n', level = logging.WARNING, filename = u'trans_log.log')
+        logging.warn(u'\n'.join(debug(t_unit_raw)))
 
     return json.dumps(is_vandal)
 
