@@ -53,6 +53,6 @@
         "min":0.8
     },
     "Semantic_calculator":{
-        "min": 0.5
+        "min": 0.75
     }
 }

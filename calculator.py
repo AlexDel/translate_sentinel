@@ -3,6 +3,7 @@ import re, nltk, translator, copy
 from abuser import abuser
 from nltk.corpus import wordnet as wn
 
+
 class Calculator:
     '''
     Calculators' base class
@@ -12,43 +13,41 @@ class Calculator:
         tokenizer = nltk.tokenize.RegexpTokenizer(u'\s+', gaps=True)
         return tokenizer.tokenize(unicode(string))
 
-    def stem(self,word, lang = u'en'):
+    def stem(self, word, lang=u'en'):
         if lang == u'en':
             return nltk.stem.PorterStemmer().stem(word)
 
-    def remove_stopwords(self, word_list, lang = u'en'):
+    def remove_stopwords(self, word_list, lang=u'en'):
         if lang == 'en':
             stopwords = set(nltk.corpus.stopwords.words('english'))
             return [word for word in word_list if word not in stopwords]
         else:
             return None
 
-    def normalize_sentence(self, sentence, lang = 'en', filter_stopwords = True):
+    def normalize_sentence(self, sentence, lang='en', filter_stopwords=True):
         """
         эта функция выполняет разбиение на токены, удаление стоп-слова и стемминг
         """
         tokens = self.tokenize(sentence)
         if filter_stopwords == False:
-            return [self.stem(token).lower() for token in tokens ]
+            return [self.stem(token).lower() for token in tokens]
         else:
             r_tokens = self.remove_stopwords(tokens, lang)
-            return [self.stem(token).lower()  for token in r_tokens]
+            return [self.stem(token).lower() for token in r_tokens]
 
     def perform_calc(self, translation_unit):
         raise NotImplementedError
 
 
 class String_target_length(Calculator):
-
     def __init__(self):
         self.name = u'String_target_length'
 
     def perform_calc(self, translation_unit):
-       return len(translation_unit.target.text)
+        return len(translation_unit.target.text)
 
 
 class Length_difference(Calculator):
-
     def __init__(self):
         self.name = u'Length_difference'
 
@@ -56,11 +55,10 @@ class Length_difference(Calculator):
         or_length = float(len(translation_unit.original.text))
         tar_length = float(len(translation_unit.target.text))
 
+        return (or_length + 1) / (tar_length + 1)
 
-        return (or_length+1)/(tar_length+1)
 
 class Digits_amount(Calculator):
-
     def __init__(self):
         self.name = u'Digits_amount'
 
@@ -69,83 +67,97 @@ class Digits_amount(Calculator):
 
     def perform_calc(self, translation_unit):
         target = translation_unit.target.text
-        return (self._count_digits(target) + 1)/(float((len(target))) + 1)
+        return (self._count_digits(target) + 1) / (float((len(target))) + 1)
+
 
 class Digits_blocks_difference(Calculator):
-
     def __init__(self):
         self.name = u'Digits_blocks_intersection'
 
     def _collect_digit_blocks(self, string):
         reg_exp = r'(\d+)'
-        return set(re.findall(reg_exp,string))
+        return set(re.findall(reg_exp, string))
 
     def perform_calc(self, translation_unit):
         or__blocks = self._collect_digit_blocks(translation_unit.original.text)
         tar__blocks = self._collect_digit_blocks(translation_unit.target.text)
 
-        return float(len(or__blocks ^ tar__blocks)+1)/ (len(or__blocks) + 1)
+        return float(len(or__blocks ^ tar__blocks) + 1) / (len(or__blocks) + 1)
+
 
 class Alphanum_symbols_part(Calculator):
-
     def __init__(self):
         self.name = 'Alphanum_symbols_part'
 
-    def _count_alnum(self,string):
+    def _count_alnum(self, string):
         return len([s for s in string if s.isalnum()])
 
     def perform_calc(self, translation_unit):
         or_alnum = self._count_alnum(translation_unit.original.text)
         tar_alnum = self._count_alnum(translation_unit.target.text)
-        return (float(or_alnum)+1)/(tar_alnum+1)
+        return (float(or_alnum) + 1) / (tar_alnum + 1)
+
 
 class Target_upper_case(Calculator):
-
     def __init__(self):
         self.name = 'Target_upper_case'
 
-    def _count_uppercase(self,string):
+    def _count_uppercase(self, string):
         return len([s for s in string if s.isupper()])
 
     def perform_calc(self, translation_unit):
         or_uppercase = self._count_uppercase(translation_unit.original.text)
-        tar_uppercase = self. _count_uppercase(translation_unit.target.text)
-        return (float(or_uppercase)+1)/(tar_uppercase+1)
+        tar_uppercase = self._count_uppercase(translation_unit.target.text)
+        return (float(or_uppercase) + 1) / (tar_uppercase + 1)
+
 
 class Longest_symbol_repetition(Calculator):
-
     def __init__(self):
         self.name = 'Longest_symbol_repetition'
 
     def _find_long_blocks(self, string):
-        '''Метод ищет кол-во символов длинее 3 символов'''
-        return [match[0] for match in re.findall(r'((\w)\2{2,})', string)]
+        '''Метод ищет самый длинный повтор сивола'''
+
+        #инициализруем переменные: количество повторов и повторяющийся символ
+        repeat_times = 0
+        repeated_symbol = True
+
+        while repeated_symbol:
+            pattern = r'(\w)\1{%s,}' % (repeat_times)
+            repeat_times += 1
+            try:
+                repeated_symbol = re.compile(pattern, re.UNICODE).findall(string)[0]
+            except:
+                break
+        return repeated_symbol * repeat_times + repeated_symbol
 
     def perform_calc(self, translation_unit):
-        long_bloks = self._find_long_blocks(translation_unit.target.text)
-        if len(long_bloks)  > 0:
-            return max([len(s) for s in long_bloks ])
+        long_blocks = self._find_long_blocks(translation_unit.target.text)
+        print len(long_blocks)
+        if len(long_blocks) != 0:
+            return max([len(s) for s in long_blocks])
         else:
             return 0
 
-class Longest_word(Calculator):
 
+class Longest_word(Calculator):
     def __init__(self):
         self.name = 'Longest_word'
 
     def perform_calc(self, translation_unit):
         length_list = [len(w) for w in self.tokenize(translation_unit.target.text)]
-        if length_list :
+        if length_list:
             return max(length_list)
         else:
             return 0
+
 
 class Calculator_with_translator(Calculator):
     '''
     расширение класса с использование машинного переводчика
     '''
 
-    def translate(self, text, or_lang = 'ru', tar_lang = 'en'):
+    def translate(self, text, or_lang='ru', tar_lang='en'):
         return translator.Translator().translate(text, or_lang, tar_lang)
 
     def normalize_in_english(self, sentence):
@@ -160,14 +172,13 @@ class Calculator_with_translator(Calculator):
     def normalize_with_wnmorphy(self, sentence):
         #этот метод нормализует слова с помощьюю встроенного в wordnet функкионала
         if sentence.lang != u'en':
-            return [wn.morphy(t) for t in Calculator().tokenize(self.translate(sentence.text, sentence.lang, 'en')) if wn.morphy(t)]
+            return [wn.morphy(t) for t in Calculator().tokenize(self.translate(sentence.text, sentence.lang, 'en')) if
+                    wn.morphy(t)]
         else:
             return [wn.morphy(t) for t in Calculator().tokenize(sentence.text) if wn.morphy(t)]
 
 
-
 class BLEU_metrics(Calculator_with_translator):
-
     def __init__(self):
         self.name = 'BLEU_metrics'
 
@@ -181,19 +192,20 @@ class BLEU_metrics(Calculator_with_translator):
             tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
 
             #считаем, сколько нормализованных токенов получилось
-            token_intersection = len(set(self.normalize_sentence(tar_text_translated)) & set(self.normalize_sentence(or_text)))
+            token_intersection = len(
+                set(self.normalize_sentence(tar_text_translated)) & set(self.normalize_sentence(or_text)))
 
             #длина исходного предложения (в токенах)
             or_normalized_length = len(set(self.normalize_sentence(or_text)))
 
-            return float(token_intersection)/or_normalized_length
+            return float(token_intersection) / or_normalized_length
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Bigram_calculator(Calculator_with_translator):
 
+class Bigram_calculator(Calculator_with_translator):
     def __init__(self):
         self.name = 'Bigram_calculator'
 
@@ -215,7 +227,7 @@ class Bigram_calculator(Calculator_with_translator):
             #считаем пересечение биграм
             bigram_intersection = set(or_bigramms).intersection(set(tar_bigrams))
 
-            return float(len(bigram_intersection))/(2*len(self.tokenize(tar_text_translated)))
+            return float(len(bigram_intersection)) / (2 * len(self.tokenize(tar_text_translated)))
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
@@ -223,7 +235,6 @@ class Bigram_calculator(Calculator_with_translator):
 
 
 class Binary_calculator(Calculator_with_translator):
-
     def retrieve_normalized_tokens(self, translation_unit):
         #этот метод возращает нормализованные токены оригинала и перевода
 
@@ -234,7 +245,7 @@ class Binary_calculator(Calculator_with_translator):
             tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
 
             #нормализуем
-            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text,tar_text_translated))
+            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text, tar_text_translated))
 
             #возращаем нормализованные токены
             return norm_or, norm_tar
@@ -246,11 +257,10 @@ class Binary_calculator(Calculator_with_translator):
 
 
 class Levenstein_calculator(Binary_calculator):
-
     def __init__(self):
         self.name = 'Levenstein_calculator'
 
-    def _calc_levdistance(self, seq1,seq2):
+    def _calc_levdistance(self, seq1, seq2):
         return nltk.metrics.distance.edit_distance(seq1, seq2)
 
     def perform_calc(self, translation_unit):
@@ -258,14 +268,14 @@ class Levenstein_calculator(Binary_calculator):
 
         if norm_or and norm_tar:
             #возращаем нормализованное расстояние Левенштейна
-            return float(self._calc_levdistance(norm_or,norm_tar))/len(norm_or)
+            return float(self._calc_levdistance(norm_or, norm_tar)) / len(norm_or)
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Jaccard_distance(Binary_calculator):
 
+class Jaccard_distance(Binary_calculator):
     def __init__(self):
         self.name = 'Jaccard_distance'
 
@@ -274,14 +284,14 @@ class Jaccard_distance(Binary_calculator):
 
         if norm_or and norm_tar:
             #возращаем нормализованное расстояние Жаккара
-            return float(nltk.metrics.jaccard_distance(set(norm_or),set(norm_tar)))
+            return float(nltk.metrics.jaccard_distance(set(norm_or), set(norm_tar)))
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Braun_Balke_calculator(Binary_calculator):
 
+class Braun_Balke_calculator(Binary_calculator):
     def __init__(self):
         self.name = 'Braun_Balke_calculator'
 
@@ -289,14 +299,14 @@ class Braun_Balke_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(len(set(norm_or).intersection(set(norm_tar))))/max([len(s) for s in [norm_or,norm_tar]])
+            return float(len(set(norm_or).intersection(set(norm_tar)))) / max([len(s) for s in [norm_or, norm_tar]])
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Ochai_calculator(Binary_calculator):
 
+class Ochai_calculator(Binary_calculator):
     def __init__(self):
         self.name = 'Ochai_calculator'
 
@@ -304,14 +314,15 @@ class Ochai_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(len(set(norm_or).intersection(set(norm_tar))))/(len(set(norm_tar)) * len(set(norm_or)))**0.5
+            return float(len(set(norm_or).intersection(set(norm_tar)))) / (
+                len(set(norm_tar)) * len(set(norm_or))) ** 0.5
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Simpson_calculator(Binary_calculator):
 
+class Simpson_calculator(Binary_calculator):
     def __init__(self):
         self.name = 'Simpson_calculator'
 
@@ -320,26 +331,27 @@ class Simpson_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(set(norm_or).intersection(set(norm_tar)))/min([len(s) for s in [norm_or,norm_tar]])
+            return float(set(norm_or).intersection(set(norm_tar))) / min([len(s) for s in [norm_or, norm_tar]])
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
             return None
 
-class Profanity_calculator(Calculator):
 
+class Profanity_calculator(Calculator):
     def __init__(self):
         self.name = 'Profanity_calculator'
 
     def perform_calc(self, translation_unit):
-        profanity_num_or = len(abuser.collect_abuse_words(self.tokenize(translation_unit.original.text),translation_unit.original.lang))
-        profanity_num_tar = len(abuser.collect_abuse_words(self.tokenize(translation_unit.target.text), translation_unit.target.lang))
+        profanity_num_or = len(
+            abuser.collect_abuse_words(self.tokenize(translation_unit.original.text), translation_unit.original.lang))
+        profanity_num_tar = len(
+            abuser.collect_abuse_words(self.tokenize(translation_unit.target.text), translation_unit.target.lang))
 
-        return float((1 + profanity_num_or))/(1 + profanity_num_tar)
+        return float((1 + profanity_num_or)) / (1 + profanity_num_tar)
 
 
 class Semantic_calculator(Calculator_with_translator):
-
     def __init__(self):
         self.name = 'Semantic_calculator'
 
@@ -359,7 +371,7 @@ class Semantic_calculator(Calculator_with_translator):
                 try:
                     s_d = sseta.wup_similarity(ssetb)
                     if s_d > sem_distance:
-                        sem_distance =  s_d
+                        sem_distance = s_d
                 except:
                     sem_distance = 0
         return sem_distance
@@ -391,9 +403,8 @@ class Semantic_calculator(Calculator_with_translator):
         Данный метод вычисляет значение вектора для данного предложения
         '''
 
-
         for k in vector.keys():
-            dists = [self.get_word_similarity(k,t) for t in tokens]
+            dists = [self.get_word_similarity(k, t) for t in tokens]
             if dists:
                 vector[k] = max(dists)
             else:
@@ -417,21 +428,19 @@ class Semantic_calculator(Calculator_with_translator):
         vector_norm = []
 
         for k in vector.keys():
-            if vector1[k] != 0 and vector2[k] !=0:
+            if vector1[k] != 0 and vector2[k] != 0:
                 #print u'%s -- %s:%s' % (k, vector1[k],vector2[k])
-                vector_norm.append((vector1[k] * vector2[k])**0.5)
+                vector_norm.append((vector1[k] * vector2[k]) ** 0.5)
 
-
-        result = float(sum(vector_norm))/(len(vector_norm)+1)
+        result = float(sum(vector_norm)) / (len(vector_norm) + 1)
         return result
 
 
-
-
 #список рабочих калькуляторов, используемых при оценке
-calculators = [String_target_length(), Length_difference(), Digits_amount(),Digits_blocks_difference(), Alphanum_symbols_part(),
-Target_upper_case(), Longest_symbol_repetition(),Longest_word(), BLEU_metrics(), Bigram_calculator(),
-Levenstein_calculator(), Braun_Balke_calculator(),Profanity_calculator(),Semantic_calculator() ]
+calculators = [String_target_length(), Length_difference(), Digits_amount(), Digits_blocks_difference(),
+               Alphanum_symbols_part(),
+               Target_upper_case(), Longest_symbol_repetition(), Longest_word(), BLEU_metrics(), Bigram_calculator(),
+               Levenstein_calculator(), Braun_Balke_calculator(), Profanity_calculator(), Semantic_calculator()]
 
 
 
