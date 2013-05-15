@@ -11,8 +11,8 @@
         "max":0.5
     },
     "Digits_blocks_intersection":{
-        "max":0.6,
-        "min":0.4
+        "max":1.2,
+        "min":0.6
     },
     "Alphanum_symbols_part":{
         "max": 1.3,

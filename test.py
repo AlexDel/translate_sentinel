@@ -16,13 +16,13 @@ def test():
 
 
     #try:
-    for i, t in enumerate(tests[836:]):
+    for i, t in enumerate(tests[351:]):
         # print i
         # print t[0]
         # print t[1]
 
         r = u'''{"orig": {"lang": "en", "text": "%s"}, "target": {"lang": "ru", "text": "%s"}}''' % (t[0].replace(u'"',u''),t[1].replace(u'"',u''))
-        print str(i + 836)
+        print str(i + 351)
 
         print u'\n'.join(main.debug(r))
         print u'\n'
