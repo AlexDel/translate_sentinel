@@ -1,5 +1,5 @@
 {
-        "String_target_length":{
+    "String_target_length":{
         "max":10000,
         "min":1
     },

@@ -132,11 +132,8 @@ class Longest_symbol_repetition(Calculator):
         return repeated_symbol * repeat_times + repeated_symbol
 
     def perform_calc(self, translation_unit):
-        long_blocks = self._find_long_blocks(translation_unit.target.text)
-        if len(long_blocks) != 0:
-            return max([len(s) for s in long_blocks])
-        else:
-            return 0
+        return len(self._find_long_blocks(translation_unit.target.text))
+
 
 
 class Longest_word(Calculator):
