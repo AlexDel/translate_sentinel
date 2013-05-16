@@ -185,14 +185,15 @@ class BLEU_metrics(Calculator_with_translator):
         #если текст оригинала на английском, переводим вариант на английский и сравниваем
         if or_text.lang == 'en':
             #переводим текст варианта на английский (оригинальный)
-            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+            tar_text_translated = self.translate(tar_text.text, tar_text.lang, or_text.lang)
 
-            #считаем, сколько нормализованных токенов получилось
-            token_intersection = len(
-                set(self.normalize_sentence(tar_text_translated)) & set(self.normalize_sentence(or_text)))
+            #считаем, сколько токенов (кроме стоп-слов) получилось
+            or_tokens = self.remove_stopwords(self.tokenize(or_text.text))
+            tar_trans_tokens = self.remove_stopwords(self.tokenize(tar_text_translated))
+            token_intersection = len(set(or_tokens) & set(tar_trans_tokens))
 
             #длина исходного предложения (в токенах)
-            or_normalized_length = len(set(self.normalize_sentence(or_text)))
+            or_normalized_length = len(set(or_tokens))
 
             return float(token_intersection) / or_normalized_length
 
