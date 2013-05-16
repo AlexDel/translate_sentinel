@@ -215,7 +215,7 @@ class Bigram_calculator(Calculator_with_translator):
 
         if or_text.lang == 'en':
             #переводим текст варианта на английский (оригинальный)
-            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+            tar_text_translated = self.translate(tar_text.text, tar_text.lang, or_text.lang)
 
             #превращаем текст в биграммы
             or_bigramms = self._make_bigrams(self.tokenize(or_text.text))
