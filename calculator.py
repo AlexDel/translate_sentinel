@@ -239,10 +239,10 @@ class Binary_calculator(Calculator_with_translator):
         tar_text = translation_unit.target
         if or_text.lang == 'en':
             #переводим текст варианта на английский (оригинальный)
-            tar_text_translated = self.translate(tar_text, tar_text.lang, or_text.lang)
+            tar_text_translated = self.translate(tar_text.text, tar_text.lang, or_text.lang)
 
             #нормализуем
-            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text, tar_text_translated))
+            norm_or, norm_tar = (self.normalize_sentence(s) for s in (or_text.text, tar_text_translated))
 
             #возращаем нормализованные токены
             return norm_or, norm_tar
@@ -262,7 +262,8 @@ class Levenstein_calculator(Binary_calculator):
 
     def perform_calc(self, translation_unit):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
-
+        print norm_or
+        print norm_tar
         if norm_or and norm_tar:
             #возращаем нормализованное расстояние Левенштейна
             return float(self._calc_levdistance(norm_or, norm_tar)) / len(norm_or)
