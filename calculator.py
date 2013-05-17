@@ -262,8 +262,6 @@ class Levenstein_calculator(Binary_calculator):
 
     def perform_calc(self, translation_unit):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
-        print norm_or
-        print norm_tar
         if norm_or and norm_tar:
             #возращаем нормализованное расстояние Левенштейна
             return float(self._calc_levdistance(norm_or, norm_tar)) / len(norm_or)
@@ -329,7 +327,7 @@ class Simpson_calculator(Binary_calculator):
         norm_or, norm_tar = self.retrieve_normalized_tokens(translation_unit)
 
         if norm_or and norm_tar:
-            return float(set(norm_or).intersection(set(norm_tar))) / min([len(s) for s in [norm_or, norm_tar]])
+            return float(len(set(norm_or).intersection(set(norm_tar)))) / min([len(s) for s in [norm_or, norm_tar]])
 
         #иначе ничего не возращаем (что делать с другими парами будем позже думать)
         else:
@@ -427,7 +425,6 @@ class Semantic_calculator(Calculator_with_translator):
 
         for k in vector.keys():
             if vector1[k] != 0 and vector2[k] != 0:
-                #print u'%s -- %s:%s' % (k, vector1[k],vector2[k])
                 vector_norm.append((vector1[k] * vector2[k]) ** 0.5)
 
         result = float(sum(vector_norm)) / (len(vector_norm) + 1)
@@ -436,9 +433,8 @@ class Semantic_calculator(Calculator_with_translator):
 
 #список рабочих калькуляторов, используемых при оценке
 calculators = [String_target_length(), Length_difference(), Digits_amount(), Digits_blocks_difference(),
-               Alphanum_symbols_part(),
-               Target_upper_case(), Longest_symbol_repetition(), Longest_word(), BLEU_metrics(), Bigram_calculator(),
-               Levenstein_calculator(), Braun_Balke_calculator(), Profanity_calculator(), Semantic_calculator()]
+               Alphanum_symbols_part(), Target_upper_case(), Longest_symbol_repetition(), Longest_word(), BLEU_metrics(), Bigram_calculator(),
+               Levenstein_calculator(), Braun_Balke_calculator(), Jaccard_distance(), Ochai_calculator(), Simpson_calculator(), Profanity_calculator(), Semantic_calculator()]
 
 
 
