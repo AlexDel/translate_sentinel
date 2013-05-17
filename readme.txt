@@ -11,8 +11,13 @@ Original text and its translation are analyzed under several parameters and deci
     Module is run with main.py.
 
     main.py API:
-        process() - takes json-input and returns boolean whether the translation is vandal or not
-        debug() - takes json-input and returns values of evaluated parameteres
+        process(t_unit_raw, make_log = False)
+            args:
+                t_unit_raw - json - translation unit
+                make_log - boolean - whether the debug results for the t.unit should be added to log
+            r-type: json (boolean) - whether the translation is vandal or not
+
+        debug(t_unit_raw) - takes json-input and returns values of evaluated parameteres
 
 
     Here is an example usage of Translate sentinel module:
@@ -51,5 +56,21 @@ Original text and its translation are analyzed under several parameters and deci
              }
         }
    NB! Special symbols in json like ; " : { and { should be escaped in "text" values.
+
+4.  Logging
+    Logging is performed within "main.process()" method with argument "make_log = True" passed.
+    Log entry structure:
+        'SENTINEL' [DATE - TIME]
+        Original text
+        Translated text
+        Vandal value (True|False)
+        Calc_1_name - calc_1_value
+        Calc_2_name - calc_2_value
+        ..........................
+        Calc_n_name - calc_n_value
+
+    Log is stored in  module root directory in file 'trans_log.log'
+
+
 
 All bugs and issues are welcome at https://bitbucket.org/AlexDel/translate_sentinel/
